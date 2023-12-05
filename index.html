@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket.io test</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", (event) => {
+            let socket = io();
+
+            const boton = document.getElementById("botonEvento");
+
+            boton?.addEventListener("click", () => {
+                let texto = document.getElementById("textoEnvioEvento").value;
+                socket.emit('click_boton', { texto });
+            });
+
+            socket.on('nuevo_mensaje', (data) => {
+                mostrarMensaje(data.texto);
+            })
+        })
+
+        function mostrarMensaje(texto) {
+            const htmlStr = `\n<li>${texto}</li>`;
+            
+            let listaMensajes = document.getElementById("listaMensajes");
+
+            listaMensajes.innerHTML += htmlStr;
+        }
+    </script>
+</head>
+
+<body>
+    <input type="text" name="texto_envio" id="textoEnvioEvento">
+    <button id="botonEvento">Enviar</button>
+    <div>
+        <h1>Lista mensajes de otros usuarios:</h1>
+        <ul id="listaMensajes"></ul>
+    </div>
+</body>
+
+</html>
